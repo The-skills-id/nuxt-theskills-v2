@@ -20,7 +20,21 @@
         <v-form ref="form">
           <v-row class="ml-6" align="center" justify="center" no-gutters>
             <v-col cols="12" md="8">
-              <span class="text-subtitle-2">Password</span>
+              <span class="text-subtitle-2">Email</span>
+              <v-text-field
+                v-model="email"
+                :rules="[
+                  (v) => !!v || 'Email harus diisi',
+                  (v) => /.+@.+\..+/.test(v) || 'E-mail tidak valid',
+                ]"
+                placeholder="Email"
+                flat
+                outlined
+                @keyup.enter="reset"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="8">
+              <span class="text-subtitle-2">Password Baru</span>
               <v-text-field
                 v-model="password"
                 :rules="[(v) => !!v || 'password harus diisi']"
@@ -28,7 +42,7 @@
                 placeholder="Password"
                 flat
                 outlined
-                @keyup.enter="login"
+                @keyup.enter="reset"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -40,7 +54,7 @@
             large
             block
             :loading="loading"
-            @click="login"
+            @click="reset"
             >Simpan</v-btn
           >
         </v-card-actions>
@@ -54,7 +68,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   data: () => ({
     loading: false,
-    username: '',
+    email: '',
     password: '',
   }),
   computed: {
@@ -68,33 +82,38 @@ export default {
       setAlert: 'alert/set',
       setAuth: 'auth/set',
     }),
-    login() {
+    reset() {
       this.loading = true
+
+      const token = this.$route.params.token
       const validate = this.$refs.form.validate()
+
       if (!validate) {
         return
       }
 
       // eslint-disable-next-line no-undef
       const data = new FormData()
-      data.set('username', this.username)
+      data.set('token', token)
+      data.set('email', this.email)
       data.set('password', this.password)
-
+      // eslint-disable-next-line no-undef
+      const uri = encodeURI('/api/v2/reset-password/' + token)
       this.$axios
-        .post('/api/v2/login', data)
+        .post(uri, data)
         .then((response) => {
-          this.setAuth(response.data)
           this.setAlert({
             status: true,
-            text: 'Login Berhasil ',
+            text: 'Password berhasil diubah',
             type: 'success',
           })
-          this.$router.push('/')
+          this.loading = !this.loading
+          this.$router.push('/auth/login')
         })
         .catch(() => {
           this.setAlert({
             status: true,
-            text: 'Login gagal, username atau password salah',
+            text: 'Password gagal diubah',
             type: 'warning',
           })
           this.loading = !this.loading

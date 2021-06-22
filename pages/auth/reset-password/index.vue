@@ -20,14 +20,14 @@
         <v-form ref="form">
           <v-row class="ml-6" align="center" justify="center" no-gutters>
             <v-col cols="12" md="8">
-              <span class="text-subtitle-2">Email / Username</span>
+              <span class="text-subtitle-2">Email</span>
               <v-text-field
                 v-model="credential"
                 :rules="[(v) => !!v || 'Credential harus diisi']"
-                placeholder="Email / Username"
+                placeholder="Email"
                 flat
                 outlined
-                @keyup.enter="reset"
+                @keyup.enter="resetpw"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -39,7 +39,7 @@
             large
             block
             :loading="loading"
-            @click="reset"
+            @click="resetpw"
             >Reset Password</v-btn
           >
         </v-card-actions>
@@ -66,7 +66,7 @@ export default {
       setAlert: 'alert/set',
       setAuth: 'auth/set',
     }),
-    reset() {
+    resetpw() {
       this.loading = true
       const validate = this.$refs.form.validate()
       if (!validate) {
@@ -80,19 +80,16 @@ export default {
       this.$axios
         .post('/api/v2/reset-password', data)
         .then((response) => {
-          console.log(response)
-          this.setAlert({
-            status: true,
-            text: 'Email untuk ubah password sudah dikirim, Cek email anda ',
-            type: 'success',
+          this.$swal({
+            text: response.data.message,
+            icon: response.data.status,
           })
           this.loading = !this.loading
         })
-        .catch((error) => {
-          console.log(error)
+        .catch(() => {
           this.setAlert({
             status: true,
-            text: 'Username atau email tidak ditemukan',
+            text: 'Ada yang bermasalah nih, coba lagi yaa..',
             type: 'warning',
           })
           this.loading = !this.loading
