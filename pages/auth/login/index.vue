@@ -123,6 +123,7 @@ export default {
             text: 'Login Berhasil ',
             type: 'success',
           })
+          console.log(this.user)
           this.$router.push('/')
         })
         .catch(() => {

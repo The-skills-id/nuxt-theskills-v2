@@ -229,17 +229,23 @@ export default {
       setAuth: 'auth/set',
     }),
     logout() {
+      console.log(this.user.token.plainTextToken)
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.user.token.plainTextToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
       this.loading = !this.loading
       this.$axios
-        .post('/api/v2/logout', { token: this.user.token })
+        .post('/api/v2/logout', {}, config)
         .then((response) => {
           this.setAuth({})
           this.setAlert({
             status: true,
-            text: 'Logout Berhasil ',
+            text: response.data.message,
             type: 'success',
           })
-
           this.$router.push('/')
         })
         .catch(() => {

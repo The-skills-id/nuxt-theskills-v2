@@ -69,7 +69,7 @@ export default {
     'vue-sweetalert2/nuxt',
   ],
   googleAnalytics: {
-    id: '{G-6KKZ0VMR7V}',
+    id: 'G-6KKZ0VMR7V',
     dev: false,
   },
   sitemap: {
@@ -77,8 +77,8 @@ export default {
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseUrl: 'https://sapi.the-skills.id/',
-    // baseUrl: 'http://127.0.0.1:8000/',
+    // baseUrl: 'https://sapi.the-skills.id/',
+    baseUrl: 'http://127.0.0.1:8000/',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

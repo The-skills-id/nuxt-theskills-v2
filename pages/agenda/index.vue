@@ -57,8 +57,11 @@ export default {
     }
   },
   mounted() {
+    const config = {
+      headers: { Authorization: `Bearer ${this.user.token.plainTextToken}` },
+    }
     this.$axios
-      .get(encodeURI('/api/v2/webinar/mywebinar/' + this.user.user.id))
+      .get(encodeURI('/api/v2/webinar/mywebinar/' + this.user.user.id), config)
       .then((res) => {
         this.mywebinar = res.data
       })
