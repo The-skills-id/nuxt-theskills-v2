@@ -45,13 +45,23 @@
             <v-col cols="12" md="8">
               <nuxt-link
                 to="/auth/register"
-                class="font-weight-light text-subtitle-2 blue-lighten-4--text text-decoration-underline"
+                class="
+                  font-weight-light
+                  text-subtitle-2
+                  blue-lighten-4--text
+                  text-decoration-underline
+                "
                 >Belum punya akun ?</nuxt-link
               >
               <v-spacer></v-spacer>
               <nuxt-link
                 to="/auth/reset-password"
-                class="font-weight-light text-subtitle-2 blue-lighten-4--text text-decoration-underline"
+                class="
+                  font-weight-light
+                  text-subtitle-2
+                  blue-lighten-4--text
+                  text-decoration-underline
+                "
                 >Lupa password</nuxt-link
               >
               <!-- <a
@@ -123,7 +133,6 @@ export default {
             text: 'Login Berhasil ',
             type: 'success',
           })
-          console.log(this.user)
           this.$router.push('/')
         })
         .catch(() => {
