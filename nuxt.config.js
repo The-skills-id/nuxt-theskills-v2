@@ -70,7 +70,6 @@ export default {
   ],
   googleAnalytics: {
     id: 'G-6KKZ0VMR7V',
-    dev: false,
   },
   sitemap: {
     hostname: 'https://the-skills.id',
