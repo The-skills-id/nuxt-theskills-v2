@@ -142,12 +142,12 @@ export default {
           showCancelButton: true,
           showConfirmButton: true,
           showCloseButton: true,
-        }).then((value) => {
+        }).then((response) => {
           this.$axios
             .post('/api/v2/webinar/register', data)
-            .then(() => {
+            .then((response) => {
               this.$swal({
-                text: 'Selamat, anda telah terdaftar di webinar ini.',
+                text: response.data.message,
               })
             })
             .catch((err) => {
