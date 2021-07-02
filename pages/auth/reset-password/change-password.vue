@@ -87,7 +87,7 @@ export default {
     reset() {
       this.loading = true
 
-      const token = this.$route.params.token
+      const token = this.$route.query.token
       const validate = this.$refs.form.validate()
 
       if (!validate) {

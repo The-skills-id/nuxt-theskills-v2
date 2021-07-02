@@ -262,6 +262,9 @@ export default {
 </script>
 
 <style>
+#app {
+  font-family: 'Montserrat', sans-serif;
+}
 .drawer {
   margin-top: 70px;
   border-top-right-radius: 10px;
