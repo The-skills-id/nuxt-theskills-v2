@@ -12,13 +12,14 @@
         </v-breadcrumbs> -->
       <!-- desktop -->
       <div v-if="!loading && $vuetify.breakpoint.mdAndUp">
-        <h1 v-text="'Video dan Materi ' + cdetail.minicourse_name"></h1>
+        <h3 v-text="'Materi ' + cdetail.minicourse_name"></h3>
         <v-row class="mt-6">
-          <v-col cols="12" cla>
+          <v-col cols="12">
             <v-tabs v-model="currentTab" vertical>
               <v-tab
                 v-for="(i, index) in detail"
                 :key="index"
+                class="text-capitalize"
                 @click="tabClick(index)"
               >
                 {{ i.minicourse_name }}

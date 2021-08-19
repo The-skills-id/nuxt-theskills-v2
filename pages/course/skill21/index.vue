@@ -13,50 +13,61 @@
       </v-row>
     </v-container>
     <v-container>
-      <h3>Course saya</h3>
-      <v-row v-if="loading" class="mt-6">
-        <v-col v-for="i in 3" :key="i" cols="12" md="4">
-          <v-skeleton-loader
-            class="mx-auto"
-            max-width="300"
-            type="card"
-          ></v-skeleton-loader>
-        </v-col>
-      </v-row>
-      <v-row v-if="!loading">
-        <v-col v-for="(c, index) in mycourses" :key="index" cols="12" md="4">
-          <v-lazy v-model="c.isActive" :options="{ threshold: 0.5 }">
-            <v-card class="mx-auto" color="white" elevation="3" outlined>
-              <!-- :to="'/course/skill21/' + c.courses[0].id" -->
-              <v-img
-                lazy-src="/loader.svg"
-                :src="baseUrl + c.crs_thumbnail.replace('.', '_')"
-                contain
-                @load="imgLoad = !imgLoad"
-              ></v-img>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title
-                    class="text-wrap text-wrap h5 mb-1"
-                    v-text="c.course_name"
-                  ></v-list-item-title>
-                  <v-list-item-subtitle class="subtitle font-weight-bold">
-                    Harga : {{ c.price == 0 ? 'Gratis' : 'Rp. ' + c.price }}
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              <v-card-actions class="mb-2">
-                <nuxt-link :to="'/course/skill21/minicourse/' + c.id">
-                  <v-btn color="amber" class="ml-2" small rounded dark
-                    >Lanjutkan belajar</v-btn
-                  >
-                </nuxt-link>
-              </v-card-actions>
-            </v-card>
-          </v-lazy>
-        </v-col>
-      </v-row>
-      <h3>List course</h3>
+      <div v-if="!guest">
+        <h3 class="text-center px-4 mb-6">Course saya</h3>
+        <v-row v-if="loading" class="mt-6">
+          <v-col v-for="i in 3" :key="i" cols="12" md="4">
+            <v-skeleton-loader
+              class="mx-auto"
+              max-width="300"
+              type="card"
+            ></v-skeleton-loader>
+          </v-col>
+        </v-row>
+        <v-row v-if="!loading">
+          <v-col v-if="mycourses.length < 1">
+            <h3 class="text-center">Belum ada course yang diikuti</h3>
+          </v-col>
+          <v-col
+            v-for="(c, index) in mycourses"
+            v-else
+            :key="index"
+            cols="12"
+            md="4"
+          >
+            <v-lazy v-model="c.isActive" :options="{ threshold: 0.5 }">
+              <v-card class="mx-auto" color="white" elevation="3" outlined>
+                <!-- :to="'/course/skill21/' + c.courses[0].id" -->
+                <v-img
+                  lazy-src="/loader.svg"
+                  :src="baseUrl + c.crs_thumbnail.replace('.', '_')"
+                  contain
+                  @load="imgLoad = !imgLoad"
+                ></v-img>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      class="text-wrap text-wrap h5 mb-1"
+                      v-text="c.course_name"
+                    ></v-list-item-title>
+                    <v-list-item-subtitle class="subtitle font-weight-bold">
+                      Harga : {{ c.price == 0 ? 'Gratis' : 'Rp. ' + c.price }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-card-actions class="mb-2">
+                  <nuxt-link :to="'/course/skill21/listcard/' + c.id">
+                    <v-btn color="amber" class="ml-2" small rounded dark
+                      >Lanjutkan belajar</v-btn
+                    >
+                  </nuxt-link>
+                </v-card-actions>
+              </v-card>
+            </v-lazy>
+          </v-col>
+        </v-row>
+      </div>
+      <h3 class="text-center mb-6">List course</h3>
       <v-row v-if="loading" class="mt-6">
         <v-col v-for="i in 3" :key="i" cols="12" md="4">
           <v-skeleton-loader
@@ -199,20 +210,20 @@ export default {
     }),
   },
   created() {
-    console.log(this.user.token.plainTextToken)
     this.$axios.get(encodeURI('/api/v2/membership')).then((response) => {
       this.selectedCourse = response.data
     })
-    this.$axios
-      .get('/api/v2/course/mycourse', {
-        headers: {
-          Authorization: `Bearer ${this.user.token.plainTextToken}`,
-        },
-      })
-      .then((response) => {
-        this.mycourses = response.data.courses
-        console.log(this.mycourses)
-      })
+    if (!this.guest) {
+      this.$axios
+        .get('/api/v2/course/mycourse', {
+          headers: {
+            Authorization: `Bearer ${this.user.token.plainTextToken}`,
+          },
+        })
+        .then((response) => {
+          this.mycourses = response.data.courses
+        })
+    }
     this.$axios
       .get('/api/v2/course/pondasi-skill-abad-21')
       .then((response) => {
