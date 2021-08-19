@@ -13,9 +13,9 @@
       <!-- desktop -->
       <div v-if="!loading && $vuetify.breakpoint.mdAndUp">
         <h1 v-text="'Video dan Materi ' + cdetail.minicourse_name"></h1>
-        <v-row>
+        <v-row class="mt-6">
           <v-col cols="12" cla>
-            <v-tabs vertical>
+            <v-tabs v-model="currentTab" vertical>
               <v-tab
                 v-for="(i, index) in detail"
                 :key="index"
@@ -129,7 +129,24 @@
             <p class="font-weight-normal">{{ cdetail.description }}</p>
           </v-tab-item>
         </v-tabs-items>
+        <p class="text-center mt-6 font-weight-bold">Bahan belajar</p>
+        <v-list>
+          <v-list-item-group>
+            <v-list-item
+              v-for="(i, index) in detail"
+              :key="index"
+              @click="tabClick(index)"
+            >
+              <v-list-item-content>
+                <v-list-item-title
+                  v-text="i.minicourse_name"
+                ></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
       </div>
+
       <!-- <tombol-lihat-materi /> -->
     </v-container>
   </v-app>
@@ -150,6 +167,7 @@ export default {
     tab: null,
     cdetail: [],
     items: [{}],
+    currentTab: 1,
   }),
   computed: {
     ...mapGetters({

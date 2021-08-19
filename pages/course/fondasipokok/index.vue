@@ -65,10 +65,10 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-
 export default {
   data: () => ({
     baseUrl: 'https://sapi.the-skills.id/api/v2/storage/',
+
     classes: [],
     loading: true,
     items: [
@@ -93,7 +93,7 @@ export default {
     this.$axios
       .get('/api/v2/course/pondasi-pokok')
       .then((response) => {
-        this.classes = response.data[0].courses
+        this.classes = response.data
         this.loading = !this.loading
       })
       .catch((err) => {
