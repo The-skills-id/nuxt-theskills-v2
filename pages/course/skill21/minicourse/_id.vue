@@ -44,7 +44,7 @@
                       :src="baseUrl + cdetail.mc_thumbnail.replace('.', '_')"
                       contain
                     ></v-img>
-                    <v-tabs v-model="tab" class="mt-3" centered>
+                    <!-- <v-tabs v-model="tab" class="mt-3" centered>
                       <v-tab href="#deskripsi"> Deskripsi </v-tab>
                     </v-tabs>
 
@@ -55,7 +55,7 @@
                           v-html="i.description"
                         ></p>
                       </v-tab-item>
-                    </v-tabs-items>
+                    </v-tabs-items> -->
                   </v-col>
                   <v-col cols="4">
                     <v-simple-table>
@@ -80,7 +80,48 @@
               </v-tab-item>
             </v-tabs>
           </v-col>
-          <v-col> </v-col>
+          <v-col>
+            <v-tabs v-model="tab" class="mt-3" centered>
+              <v-tab href="#jadwal"> Jadwal Kegiatan </v-tab>
+            </v-tabs>
+
+            <v-tabs-items v-model="tab">
+              <!-- <v-tab-item :value="'deskripsi'">
+              <v-container class="mt-6">
+                <p class="font-weight-normal" v-html="cdetail.description"></p>
+              </v-container>
+            </v-tab-item> -->
+              <v-tab-item :value="'jadwal'">
+                <v-container class="mt-6">
+                  <v-col>
+                    <v-simple-table class="mb-6">
+                      <thead>
+                        <tr>
+                          <th>Tanggal</th>
+                          <th>Link Conference</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(schedule, index) in schedules" :key="index">
+                          <td>{{ schedule.date }}</td>
+                          <td>
+                            <v-btn
+                              :href="schedule.link"
+                              target="blank"
+                              class="mt-3 text-capitalize"
+                              small
+                              dark
+                              >Join zoom</v-btn
+                            >
+                          </td>
+                        </tr>
+                      </tbody>
+                    </v-simple-table>
+                  </v-col>
+                </v-container>
+              </v-tab-item>
+            </v-tabs-items>
+          </v-col>
         </v-row>
       </div>
 
@@ -123,18 +164,6 @@
           </v-col>
         </v-row>
 
-        <v-tabs v-model="tab" class="mt-3" centered>
-          <v-tab href="#deskripsi"> Deskripsi </v-tab>
-          <!-- <v-tab href="#jadwal">
-                  Jadwal Kegiatan
-              </v-tab> -->
-        </v-tabs>
-
-        <v-tabs-items v-model="tab">
-          <v-tab-item :value="'deskripsi'">
-            <p class="font-weight-normal" v-html="cdetail.description"></p>
-          </v-tab-item>
-        </v-tabs-items>
         <p class="text-center mt-6 font-weight-bold">Bahan belajar</p>
         <v-list>
           <v-list-item-group>
@@ -151,8 +180,51 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
-      </div>
 
+        <v-col>
+          <v-tabs v-model="tab" class="mt-3" centered>
+            <!-- <v-tab href="#deskripsi"> Deskripsi </v-tab> -->
+            <v-tab href="#jadwal"> Jadwal Kegiatan </v-tab>
+          </v-tabs>
+
+          <v-tabs-items v-model="tab">
+            <!-- <v-tab-item :value="'deskripsi'">
+              <v-container class="mt-6">
+                <p class="font-weight-normal" v-html="cdetail.description"></p>
+              </v-container>
+            </v-tab-item> -->
+            <v-tab-item :value="'jadwal'">
+              <v-container class="mt-6">
+                <v-col>
+                  <v-simple-table class="mb-6">
+                    <thead>
+                      <tr>
+                        <th>Tanggal</th>
+                        <th>Link Conference</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(schedule, index) in schedules" :key="index">
+                        <td>{{ schedule.date }}</td>
+                        <td>
+                          <v-btn
+                            :href="schedule.link"
+                            target="blank"
+                            class="mt-3 text-capitalize"
+                            small
+                            dark
+                            >Join zoom</v-btn
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-simple-table>
+                </v-col>
+              </v-container>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-col>
+      </div>
       <!-- <tombol-lihat-materi /> -->
     </v-container>
   </v-app>
@@ -172,6 +244,7 @@ export default {
     loading: true,
     tab: null,
     cdetail: [],
+    schedules: [],
     items: [{}],
     currentTab: 0,
   }),
@@ -181,6 +254,14 @@ export default {
     }),
   },
   created() {
+    this.$axios
+      .get(encodeURI('/api/v2/subcourse/schedule/' + this.$route.params.id))
+      .then((response) => {
+        this.schedules = response.data.schedules
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     this.$axios
       .get(encodeURI('/api/v2/minicourse/' + this.$route.params.id))
       .then((response) => {
