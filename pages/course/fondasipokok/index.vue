@@ -67,7 +67,7 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   data: () => ({
-    baseUrl: 'https://sapi.the-skills.id/api/v2/storage/',
+    baseUrl: 'http://onlyadmin.the-skills.id/api/v2/storage/',
 
     classes: [],
     loading: true,

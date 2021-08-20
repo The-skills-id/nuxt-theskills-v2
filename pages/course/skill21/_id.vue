@@ -48,7 +48,7 @@
 
 export default {
   data: () => ({
-    baseUrl: 'http://sapi.the-skills.id/api/v2/storage/',
+    baseUrl: 'http://onlyadmin.the-skills.id/api/v2/storage/',
     subcourses: [],
     loading: true,
     items: [
