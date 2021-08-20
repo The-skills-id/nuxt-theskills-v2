@@ -201,7 +201,6 @@ export default {
     tabClick(index) {
       this.$forceUpdate()
       this.cdetail = this.detail[index]
-      console.log(this.cdetail)
     },
     ...mapActions({
       setsidebarMateriItem: 'setsidebarMateriItem',

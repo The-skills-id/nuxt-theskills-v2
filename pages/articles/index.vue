@@ -99,7 +99,6 @@ export default {
     this.$axios
       .get('/api/v2/articles')
       .then((response) => {
-        console.log(response)
         this.classes = response.data.data
         this.loading = !this.loading
       })

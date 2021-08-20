@@ -229,7 +229,6 @@ export default {
       setAuth: 'auth/set',
     }),
     logout() {
-      console.log(this.user.token.plainTextToken)
       const config = {
         headers: {
           Authorization: `Bearer ${this.user.token.plainTextToken}`,
