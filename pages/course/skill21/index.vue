@@ -272,8 +272,7 @@ export default {
         .post('/api/v2/usermembership', data)
         .then((response) => {
           alert(
-            response.data +
-              'Anda telah pre-order, admin akan menghubungi anda melalui whatsapp sesuai dengan nomor yang telah anda daftarkan'
+            'Anda telah pre-order, admin akan menghubungi anda melalui whatsapp sesuai dengan nomor yang telah anda daftarkan'
           )
         })
         .catch(() => {

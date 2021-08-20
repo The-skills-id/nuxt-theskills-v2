@@ -50,7 +50,10 @@
 
                     <v-tabs-items v-model="tab">
                       <v-tab-item :value="'deskripsi'">
-                        <p class="font-weight-normal">{{ i.description }}</p>
+                        <p
+                          class="font-weight-normal"
+                          v-html="i.description"
+                        ></p>
                       </v-tab-item>
                     </v-tabs-items>
                   </v-col>
@@ -86,23 +89,25 @@
         <h1 v-text="'Video dan Materi ' + cdetail.minicourse_name"></h1>
         <v-row>
           <v-col class="text-center" cols="12" md="6">
-            <vue-plyr v-if="cdetail.link_video != '-'" class="player">
-              <div class="plyr__video-embed">
-                <iframe
-                  :src="cdetail.link_video"
-                  allowfullscreen
-                  allowtransparency
-                >
-                </iframe>
-              </div>
-            </vue-plyr>
-            <v-img
-              v-if="cdetail.mc_thumbnail != '-'"
-              max-width="500px"
-              class="mt-6"
-              :src="baseUrl + cdetail.mc_thumbnail.replace('.', '_')"
-              contain
-            ></v-img>
+            <div
+              v-for="(i, index) in detail"
+              :key="index"
+              :style="'display:' + (cdetail.id == i.id ? 'block' : 'none')"
+            >
+              <vue-plyr v-if="cdetail.link_video != '-'" class="player">
+                <div class="plyr__video-embed">
+                  <iframe :src="i.link_video" allowfullscreen allowtransparency>
+                  </iframe>
+                </div>
+              </vue-plyr>
+              <v-img
+                v-if="cdetail.mc_thumbnail != '-'"
+                max-width="500px"
+                class="mt-6"
+                :src="baseUrl + cdetail.mc_thumbnail.replace('.', '_')"
+                contain
+              ></v-img>
+            </div>
           </v-col>
           <v-col>
             <v-simple-table>
@@ -127,7 +132,7 @@
 
         <v-tabs-items v-model="tab">
           <v-tab-item :value="'deskripsi'">
-            <p class="font-weight-normal">{{ cdetail.description }}</p>
+            <p class="font-weight-normal" v-html="cdetail.description"></p>
           </v-tab-item>
         </v-tabs-items>
         <p class="text-center mt-6 font-weight-bold">Bahan belajar</p>
@@ -168,7 +173,7 @@ export default {
     tab: null,
     cdetail: [],
     items: [{}],
-    currentTab: 1,
+    currentTab: 0,
   }),
   computed: {
     ...mapGetters({
@@ -187,7 +192,6 @@ export default {
         this.detail = response.data
         this.cdetail = response.data[0]
         this.loading = false
-        console.log(response)
       })
       .catch((error) => {
         console.log(error)
@@ -195,7 +199,9 @@ export default {
   },
   methods: {
     tabClick(index) {
+      this.$forceUpdate()
       this.cdetail = this.detail[index]
+      console.log(this.cdetail)
     },
     ...mapActions({
       setsidebarMateriItem: 'setsidebarMateriItem',
